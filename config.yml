@@ -1,0 +1,23 @@
+strings:
+  commands:
+    check: "&fLe plugin fonctionne correctement !"
+  commandsGive:
+    godItems:
+      #Godsword modifiers
+      godswordName: "&fLame des dieux"
+      godsword1: "&fLame forgdans le coeur de la Terre..."
+      godsword2: ""
+      godsword3: ""
+      godsword4: ""
+      godsword5: ""
+      #Godhoe modifiers
+      godhoeName: "&6Hoe des dieux"
+      godhoe1: "&fAnalyse le terrain"
+      godhoe2: ""
+      godhoe3: ""
+      godhoe4: ""
+      godhoe5: ""
+  commandsStaff:
+    staffMenuName: "&4Menu staff"
+    #1 seul Lore max pour le compass
+    menuLore1: "&fCompass de staff, permet de rdes actions sur les joueurs"

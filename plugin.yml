@@ -1,0 +1,36 @@
+name: AkirabaneTestAPI
+version: 1.0
+author: Akirabane
+main: fr.akirabane.plugin.Main
+api-version: 1.17
+commands:
+  alerte:
+    description: Broadcast custom
+    permission: alerte.use
+  check:
+    description: Check si le plugin fonctionne
+    permission: check.use
+  godsword:
+    description: Donne une epee divine au joueur
+    permission: godsword.use
+  setspawn:
+    description: set le point de spawn
+    permission: setspawn.use
+  spawn:
+    description: se tp au spawn
+    permission: spawn.use
+  roll:
+    description: roll un chiffre de un a cent
+    permission: roll.use
+  godhoe:
+    description: donne une hoe qui repertorie les infos des blocs
+    permission: godhoe.use
+  staff:
+    description: permet de devenir staff
+    permission: staff.use
+  unstaff:
+    description: permet de sortir du mode staff
+    permission: unstaff.use
+  gban:
+    description: ban un joueur globalement de tout les bungeecord
+    permission: ban.use
