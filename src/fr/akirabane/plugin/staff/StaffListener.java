@@ -4,6 +4,7 @@ import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.SkullType;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -58,13 +59,21 @@ public class StaffListener implements Listener {
       gm.setItemMeta(gmM);
       inv.setItem(13, gm);
       ItemStack ban = new ItemStack(Material.ANVIL, 1);
-      ItemMeta banM = gm.getItemMeta();
+      ItemMeta banM = ban.getItemMeta();
       banM.setDisplayName("Bannir un joueur");
       banM.setLore(Arrays.asList(new String[] { "Permet de bannir un joueur" }));
       banM.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
       banM.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
       ban.setItemMeta(banM);
       inv.setItem(15, ban);
+      ItemStack unBan = new ItemStack(Material.DIAMOND_SHOVEL, 1);
+      ItemMeta unBanM = unBan.getItemMeta();
+      unBanM.setDisplayName("Pardonner un joueur");
+      unBanM.setLore(Arrays.asList(new String[] { "Permet de pardonner un joueur" }));
+      unBanM.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
+      unBanM.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+      unBan.setItemMeta(unBanM);
+      inv.setItem(16, unBan);
       player.openInventory(inv);
     } 
   }
@@ -86,20 +95,78 @@ public class StaffListener implements Listener {
           player.setGameMode(GameMode.CREATIVE);
           break;
         case ANVIL:
-        	Inventory inv2 = Bukkit.createInventory(null, 27, "Ban");
-        	ItemStack i1 = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short) 3);
-        	for (Player p : Bukkit.getOnlinePlayers()) {
-                SkullMeta meta = (SkullMeta) i1.getItemMeta();
-                meta.setDisplayName(p.getName());
-                i1.setItemMeta(meta);
-                inv2.addItem(new ItemStack[] { i1 });
-        		}
-        	player.openInventory(inv2);
-        	event.setCancelled(true);
-        	break;
+        	player.closeInventory();
+        	try {
+                Inventory inv2 = Bukkit.createInventory(null,  54, "ban");
+                ItemStack i1 = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+                for(Player p : Bukkit.getOnlinePlayers()) {
+                	SkullMeta meta = (SkullMeta) i1.getItemMeta();
+                	meta.setDisplayName(p.getName());
+                	i1.setItemMeta(meta);
+                	inv2.addItem(new ItemStack[] {i1});
+                }
+                player.openInventory(inv2);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+            break;
+        case DIAMOND_SHOVEL:
+        	player.closeInventory();
+        	try {
+                Inventory inv2 = Bukkit.createInventory(null,  54, "pardon");
+                ItemStack i1 = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+                for(OfflinePlayer p : Bukkit.getBannedPlayers()) {
+                	SkullMeta meta = (SkullMeta) i1.getItemMeta();
+                	meta.setDisplayName(p.getName());
+                	i1.setItemMeta(meta);
+                	inv2.addItem(new ItemStack[] {i1});
+                }
+                player.openInventory(inv2);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+            break;
         default:
         	break;
       } 
     } 
+  }
+  
+  @EventHandler
+  public void onClickBan(InventoryClickEvent banEvent) {
+	  Player player = (Player)banEvent.getWhoClicked();
+	  ItemStack current = banEvent.getCurrentItem();
+	  if(current == null) return;
+	  if(player.getOpenInventory().getTitle().equalsIgnoreCase("ban")) {
+		  banEvent.setCancelled(true);
+		  player.closeInventory();
+		  try {
+			if(current.getType() == Material.PLAYER_HEAD) {
+				player.performCommand("gban " + current.getItemMeta().getDisplayName());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	  }
+  }
+  
+  @EventHandler
+  public void onClickUnBan(InventoryClickEvent unBanEvent) {
+	  Player player = (Player)unBanEvent.getWhoClicked();
+	  ItemStack current = unBanEvent.getCurrentItem();
+	  if(current == null) return;
+	  if(player.getOpenInventory().getTitle().equalsIgnoreCase("pardon")) {
+		  unBanEvent.setCancelled(true);
+		  player.closeInventory();
+		  try {
+			if(current.getType() == Material.PLAYER_HEAD) {
+				player.performCommand("pardon " + current.getItemMeta().getDisplayName());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	  }
   }
 }
